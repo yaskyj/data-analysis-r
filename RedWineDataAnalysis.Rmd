@@ -25,17 +25,18 @@ summary(wines)
 ```
 ```{r}
 cor(wines[, c(2:13)])
-```
+  ```
 
 ```{r}
 ggplot(aes(x = quality), data = wines) + 
-  geom_histogram(position = "jitter")
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
 ```
 
 ```{r}
 ggplot(aes(x = quality, y = alcohol), data = wines) + 
-  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "orange") +
-  scale_x_continuous(breaks = .5)
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") + 
+  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
+  scale_y_continuous(limits = c(8,15), breaks = seq(8, 15, 1))
 ```
 ```{r}
 ggpairs(wines[, c(2:13)])
