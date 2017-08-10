@@ -14,9 +14,6 @@ library("GGally")
 ```
 
 ```{r}
-ggpairs(wines[, c(2:13)])
-```
-```{r}
 dim(wines)
 ```
 
@@ -25,6 +22,23 @@ str(wines)
 ```
 ```{r}
 summary(wines)
+```
+```{r}
+cor(wines[, c(2:13)])
+```
+
+```{r}
+ggplot(aes(x = quality), data = wines) + 
+  geom_histogram(position = "jitter")
+```
+
+```{r}
+ggplot(aes(x = quality, y = alcohol), data = wines) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "orange") +
+  scale_x_continuous(breaks = .5)
+```
+```{r}
+ggpairs(wines[, c(2:13)])
 ```
 
 # Final Plots and Summary
