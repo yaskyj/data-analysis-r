@@ -1,10 +1,11 @@
 ---
-title: "RedWineExploration"
+title: "Red Wine Exploration by Justin Rogers"
 output: html_document
 ---
 
+# Data Exploration
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE)
+knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=8)
 ```
 
 ```{r}
@@ -13,5 +14,21 @@ library("GGally")
 ```
 
 ```{r}
-
+ggpairs(wines[, c(2:13)])
 ```
+```{r}
+dim(wines)
+```
+
+```{r}
+str(wines)
+```
+```{r}
+summary(wines)
+```
+
+# Final Plots and Summary
+
+# Reflections
+
+
