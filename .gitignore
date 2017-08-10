@@ -11,6 +11,7 @@
 *.jpg
 *.npy
 *.bz2
+*.txt
 
 #Mac files
 .DS_Store
