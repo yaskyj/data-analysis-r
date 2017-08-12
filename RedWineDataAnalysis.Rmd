@@ -3,6 +3,8 @@ title: "Red Wine Exploration by Justin Rogers"
 output: html_document
 ---
 
+## This report explores which chemical properties influence the quality of red ws.
+
 # Data Exploration
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=8)
@@ -10,36 +12,52 @@ knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fi
 
 ```{r}
 wines <- read.csv("wineQualityReds.csv")
+ws <- wines[, c(2:13)]
 library("GGally")
+library("ggplot2")
+library("dplyr")
 ```
 
 ```{r}
-dim(wines)
+dim(ws)
 ```
 
 ```{r}
-str(wines)
+str(ws)
 ```
 ```{r}
-summary(wines)
+summary(ws)
 ```
+The report explores a dataset containing quality and 11 features for 1599 red wines. 
 ```{r}
-cor(wines[, c(2:13)])
-  ```
+cor(ws)
+```
 
 ```{r}
-ggplot(aes(x = quality), data = wines) + 
+ ggplot(aes(x = quality), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+```
+```{r}
+ggplot(aes(x = alcohol), data = ws) + 
   geom_histogram(color = I("black"), fill = I("#099DD9"))
 ```
 
 ```{r}
-ggplot(aes(x = quality, y = alcohol), data = wines) + 
+ggplot(aes(x = volatile.acidity), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+```
+```{r}
+summary(ws$volatile.acidity)
+```
+
+```{r}
+ggplot(aes(x = quality, y = alcohol), data = ws) + 
   geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") + 
   scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
   scale_y_continuous(limits = c(8,15), breaks = seq(8, 15, 1))
 ```
 ```{r}
-ggpairs(wines[, c(2:13)])
+ggpairs(ws)
 ```
 
 # Final Plots and Summary
