@@ -12,10 +12,13 @@ knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fi
 
 ```{r}
 wines <- read.csv("wineQualityReds.csv")
+# Remove the columns containing the index
 ws <- wines[, c(2:13)]
 library("GGally")
 library("ggplot2")
 library("dplyr")
+library(gridExtra)
+library(grid)
 ```
 
 ```{r}
@@ -28,15 +31,35 @@ str(ws)
 ```{r}
 summary(ws)
 ```
-The report explores a dataset containing quality and 11 features for 1599 red wines. 
+The report explores a dataset containing quality and 11 features for 1599 red wines observations. 
+
+
 ```{r}
-cor(ws)
+sapply(ws, function(x) sum(is.na(x)))
 ```
+Looking for the number of NA values for each column in the dataframe. It appears that none are missing.
+
+```{r}
+cor(ws[,c(1:11)], ws[,c(12)])
+```
+Correlation showing all variables against quality. It appears that four attributes have a weak to moderate correlation (either negative or positive) with quality: volatile.acidity, citric.acid, sulphates, and alcohol.
+
+```{r}
+ggpairs(ws)
+```
+A quick matrix chart showing some of the relationships between variables.
+
 
 ```{r}
  ggplot(aes(x = quality), data = ws) + 
   geom_histogram(color = I("black"), fill = I("#099DD9"))
 ```
+```{r}
+summary(ws$quality)
+```
+The qualities conform to a fairly normal distribution. While the scores limits were 0-10, no wines fell below 3 or scored above 8 and most falling below a 6.
+
+Now we will review some of the attributes highly correlated with quality.
 ```{r}
 ggplot(aes(x = alcohol), data = ws) + 
   geom_histogram(color = I("black"), fill = I("#099DD9"))
@@ -47,7 +70,13 @@ ggplot(aes(x = volatile.acidity), data = ws) +
   geom_histogram(color = I("black"), fill = I("#099DD9"))
 ```
 ```{r}
-summary(ws$volatile.acidity)
+ggplot(aes(x = sulphates), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+```
+
+```{r}
+ggplot(aes(x = citric.acid), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
 ```
 
 ```{r}
@@ -55,9 +84,6 @@ ggplot(aes(x = quality, y = alcohol), data = ws) +
   geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") + 
   scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
   scale_y_continuous(limits = c(8,15), breaks = seq(8, 15, 1))
-```
-```{r}
-ggpairs(ws)
 ```
 
 # Final Plots and Summary
