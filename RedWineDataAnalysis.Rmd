@@ -3,7 +3,7 @@ title: "Red Wine Exploration by Justin Rogers"
 output: html_document
 ---
 
-## This report explores which chemical properties influence the quality of red ws.
+## This report explores which chemical properties influence the quality of red wines.
 
 # Data Exploration
 ```{r setup, include=FALSE}
@@ -45,8 +45,14 @@ cor(ws[,c(1:11)], ws[,c(12)])
 Correlation showing all variables against quality. It appears that four attributes have a weak to moderate correlation (either negative or positive) with quality: volatile.acidity, citric.acid, sulphates, and alcohol.
 
 ```{r}
+cor(ws)
+```
+Correlations between all variables.
+
+```{r}
 ggpairs(ws)
 ```
+
 A quick matrix chart showing some of the relationships between variables.
 
 
@@ -63,6 +69,10 @@ Now we will review some of the attributes highly correlated with quality.
 ```{r}
 ggplot(aes(x = alcohol), data = ws) + 
   geom_histogram(color = I("black"), fill = I("#099DD9"))
+```
+```{r}
+ggplot(aes(x = alcohol), data = ws) + 
+  geom_histogram(binwidth = 1,color = I("black"), fill = I("#099DD9"))
 ```
 
 ```{r}
