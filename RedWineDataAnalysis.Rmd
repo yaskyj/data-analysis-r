@@ -21,6 +21,8 @@ library(gridExtra)
 library(grid)
 ```
 
+The report explores a dataset containing quality and 11 features for 1599 red wines observations.
+
 ```{r}
 dim(ws)
 ```
@@ -31,9 +33,7 @@ str(ws)
 ```{r}
 summary(ws)
 ```
-The report explores a dataset containing quality and 11 features for 1599 red wines observations. 
-
-
+ 
 ```{r}
 sapply(ws, function(x) sum(is.na(x)))
 ```
@@ -48,13 +48,12 @@ Correlation showing all variables against quality. It appears that four attribut
 cor(ws)
 ```
 Correlations between all variables.
-
+  
 ```{r}
 ggpairs(ws)
 ```
 
 A quick matrix chart showing some of the relationships between variables.
-
 
 ```{r}
  ggplot(aes(x = quality), data = ws) + 
@@ -65,35 +64,215 @@ summary(ws$quality)
 ```
 The qualities conform to a fairly normal distribution. While the scores limits were 0-10, no wines fell below 3 or scored above 8 and most falling below a 6.
 
-Now we will review some of the attributes highly correlated with quality.
+Make some histograms to see the distribution of other variables in the dataset including transformations for squareroot and log scales
 ```{r}
-ggplot(aes(x = alcohol), data = ws) + 
+p1 <- ggplot(aes(x = fixed.acidity), data = ws) + 
   geom_histogram(color = I("black"), fill = I("#099DD9"))
+p2 <- ggplot(aes(x = log10(fixed.acidity + 1)), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+p3 <- ggplot(aes(x = sqrt(fixed.acidity)), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+grid.arrange(p1, p2, p3,  ncol = 1)
 ```
 ```{r}
-ggplot(aes(x = alcohol), data = ws) + 
-  geom_histogram(binwidth = 1,color = I("black"), fill = I("#099DD9"))
+summary(ws$fixed.acidity)
+```
+```{r}
+ggplot(aes(x = quality, y = fixed.acidity), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
+  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
+  geom_smooth(method = "lm")
+```
+Fixed acidity appears to be negatively skewed in all charts. The lack of correlation can be seen as most  
+
+```{r}
+p1 <- ggplot(aes(x = volatile.acidity), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+p2 <- ggplot(aes(x = log10(volatile.acidity + 1)), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+p3 <- ggplot(aes(x = sqrt(volatile.acidity)), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+grid.arrange(p1, p2, p3,  ncol = 1)
+```
+```{r}
+summary(ws$volatile.acidity)
+```
+```{r}
+ggplot(aes(x = quality, y = volatile.acidity), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
+  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
+  geom_smooth(method = "lm")
 ```
 
 ```{r}
-ggplot(aes(x = volatile.acidity), data = ws) + 
+p1 <- ggplot(aes(x = citric.acid), data = ws) + 
   geom_histogram(color = I("black"), fill = I("#099DD9"))
+p2 <- ggplot(aes(x = log10(citric.acid + 1)), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+p3 <- ggplot(aes(x = sqrt(citric.acid)), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+grid.arrange(p1, p2, p3,  ncol = 1)
 ```
 ```{r}
-ggplot(aes(x = sulphates), data = ws) + 
-  geom_histogram(color = I("black"), fill = I("#099DD9"))
+summary(ws$citric.acid)
+```
+```{r}
+ggplot(aes(x = quality, y = citric.acid), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
+  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
+  geom_smooth(method = "lm")
 ```
 
 ```{r}
-ggplot(aes(x = citric.acid), data = ws) + 
+p1 <- ggplot(aes(x = residual.sugar), data = ws) + 
   geom_histogram(color = I("black"), fill = I("#099DD9"))
+p2 <- ggplot(aes(x = log10(residual.sugar + 1)), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+p3 <- ggplot(aes(x = sqrt(residual.sugar)), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+grid.arrange(p1, p2, p3,  ncol = 1)
+```
+```{r}
+summary(ws$residual.sugar)
+```
+```{r}
+ggplot(aes(x = quality, y = residual.sugar), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
+  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
+  geom_smooth(method = "lm")
 ```
 
+```{r}
+p1 <- ggplot(aes(x = chlorides), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+p2 <- ggplot(aes(x = log10(chlorides + 1)), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+p3 <- ggplot(aes(x = sqrt(chlorides)), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+grid.arrange(p1, p2, p3,  ncol = 1)
+```
+```{r}
+summary(ws$chlorides)
+```
+```{r}
+ggplot(aes(x = quality, y = chlorides), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
+  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
+  geom_smooth(method = "lm")
+```
+
+```{r}
+p1 <- ggplot(aes(x = free.sulfur.dioxide), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+p2 <- ggplot(aes(x = log10(free.sulfur.dioxide + 1)), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+p3 <- ggplot(aes(x = sqrt(free.sulfur.dioxide)), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+grid.arrange(p1, p2, p3,  ncol = 1)
+```
+```{r}
+summary(ws$free.sulfur.dioxide)
+```
+```{r}
+ggplot(aes(x = quality, y = free.sulfur.dioxide), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9")+
+  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
+  geom_smooth(method = "lm")
+```
+
+```{r}
+p1 <- ggplot(aes(x = total.sulfur.dioxide), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+p2 <- ggplot(aes(x = log10(total.sulfur.dioxide + 1)), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+p3 <- ggplot(aes(x = sqrt(total.sulfur.dioxide)), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+grid.arrange(p1, p2, p3,  ncol = 1)
+```
+```{r}
+summary(ws$total.sulfur.dioxide)
+```
+```{r}
+ggplot(aes(x = quality, y = total.sulfur.dioxide), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
+  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
+  geom_smooth(method = "lm")
+```
+
+```{r}
+p1 <- ggplot(aes(x = density), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+p2 <- ggplot(aes(x = log10(density + 1)), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+p3 <- ggplot(aes(x = sqrt(density)), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+grid.arrange(p1, p2, p3,  ncol = 1)
+```
+```{r}
+summary(ws$density)
+```
+```{r}
+ggplot(aes(x = quality, y = density), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
+  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
+  geom_smooth(method = "lm")
+```
+
+```{r}
+p1 <- ggplot(aes(x = pH), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+p2 <- ggplot(aes(x = log10(pH + 1)), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+p3 <- ggplot(aes(x = sqrt(pH)), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+grid.arrange(p1, p2, p3,  ncol = 1)
+```
+```{r}
+summary(ws$pH)
+```
+```{r}
+ggplot(aes(x = quality, y = pH), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
+  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
+  geom_smooth(method = "lm")
+```
+
+```{r}
+p1 <- ggplot(aes(x = sulphates), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+p2 <- ggplot(aes(x = log10(sulphates + 1)), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+p3 <- ggplot(aes(x = sqrt(sulphates)), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+grid.arrange(p1, p2, p3,  ncol = 1)
+```
+```{r}
+summary(ws$sulphates)
+```
+```{r}
+ggplot(aes(x = quality, y = sulphates), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
+  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
+  geom_smooth(method = "lm")
+```
+
+```{r}
+p1 <- ggplot(aes(x = alcohol), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+p2 <- ggplot(aes(x = log10(alcohol + 1)), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+p3 <- ggplot(aes(x = sqrt(alcohol)), data = ws) + 
+  geom_histogram(color = I("black"), fill = I("#099DD9"))
+grid.arrange(p1, p2, p3,  ncol = 1)
+```
+```{r}
+summary(ws$alcohol)
+```
 ```{r}
 ggplot(aes(x = quality, y = alcohol), data = ws) + 
   geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") + 
   scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
-  scale_y_continuous(limits = c(8,15), breaks = seq(8, 15, 1))
+  geom_smooth(method = "lm")
 ```
 
 # Final Plots and Summary
