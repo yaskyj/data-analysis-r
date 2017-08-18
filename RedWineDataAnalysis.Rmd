@@ -20,6 +20,7 @@ library("dplyr")
 library(gridExtra)
 library(grid)
 library(e1071)
+library(RColorBrewer)
 ```
 
 The report explores a dataset containing quality and 11 features for 1599 red wines observations.
@@ -216,7 +217,6 @@ cor(1/ws$residual.sugar, ws$quality)
 ```
 While this almost doubles the correlation (negatively), the correlation is insignificant.
 
-
 ```{r}
 ggplot(aes(x = quality, y = residual.sugar), data = ws) + 
   geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
@@ -304,7 +304,7 @@ ggplot(aes(x = quality, y = free.sulfur.dioxide), data = ws) +
 The fairly flat trendline show the lack of correlation.
 
 ```{r}
- ggplot(aes(x = total.sulfur.dioxide), data = ws) + 
+ggplot(aes(x = total.sulfur.dioxide), data = ws) + 
   geom_histogram(color = I("black"), fill = I("#099DD9"))
 ```
 ```{r}
@@ -423,7 +423,7 @@ ggplot(aes(x = quality, y = 1/(ws$sulphates)), data = ws) +
   scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
   geom_smooth(method = "lm")
 ```
-The reciprical sulphates show a much stronger negative trend with quality.
+The reciprocal sulphates show a much stronger negative trend with quality.
 
 ```{r}
 ggplot(aes(x = alcohol), data = ws) + 
@@ -467,12 +467,117 @@ ggplot(aes(x = quality, y = sqrt(alcohol)), data = ws) +
   geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") + 
   scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
   geom_smooth(method = "lm")
-
 ```
 They both appear to have the strongest trendlines we've seen with quality.
 
+Now we'll see see how the four attributes with the hightest correlations with quality correlate with each other.
+```{r}
+ggplot(aes(x = volatile.acidity, y = citric.acid), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") + 
+  geom_smooth(method = "lm")
+```
+```{r}
+cor(ws$volatile.acidity, ws$citric.acid)
+```
+Pretty strong negative correlation between volatile acidity and citric acid, but both of those attributes could be correlated merely because they are acids in the wine. 
+
+```{r}
+ggplot(aes(x = volatile.acidity, y = sulphates), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") + 
+  geom_smooth(method = "lm")
+```
+```{r}
+cor(ws$volatile.acidity, ws$sulphates)
+```
+Weak correlation between volatile acidity and sulphates.
+
+```{r}
+ggplot(aes(x = volatile.acidity, y = alcohol), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") + 
+  geom_smooth(method = "lm")
+```
+```{r}
+cor(ws$volatile.acidity, ws$alcohol)
+```
+Weak correlation between volatile acidity and alcohol.
+
+```{r}
+ggplot(aes(x = citric.acid, y = sulphates), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") + 
+  geom_smooth(method = "lm")
+```
+```{r}
+cor(ws$citric.acid, ws$sulphates)
+```
+Medium correlation between citric acid and sulphates.
+
+```{r}
+ggplot(aes(x = citric.acid, y = alcohol), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") + 
+  geom_smooth(method = "lm")
+```
+```{r}
+cor(ws$citric.acid, ws$alcohol)
+```
+Very little correlation between citric acid and alcohol.
+
+```{r}
+ggplot(aes(x = sulphates, y = alcohol), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") + 
+  geom_smooth(method = "lm")
+```
+```{r}
+cor(ws$sulphates, ws$alcohol)
+```
+Very little correlation between sulphates and alchohol.
+
 # Final Plots and Summary
+## Plot One
+```{r}
+ggplot(aes(x = quality, y = alcohol), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") + 
+  scale_x_continuous(limits = c(3,8.5), breaks = seq(3, 8.5, 0.5)) +
+  scale_y_continuous(limits = c(9,13), breaks = seq(9, 13, 0.5)) +
+  geom_smooth(method = "lm") +
+  labs(title = "Quality by Alcohol Content") +
+  xlab("Quality") +
+  ylab("Alcohol (% by volume)") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+## Description One
+Alcohol had the highest positive correlation with wine quality. This makes sense as one of the primary reason to have an alcoholic beverage in the first place is for alcohol. At around 7 level quality the vast majority of those wines contain an alcohol percentage greater than 10%.
+
+## Plot Two
+```{r}
+ggplot(aes(x = quality, y = sulphates), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
+  scale_x_continuous(limits = c(3,8), breaks = seq(3,8, 0.5)) +
+  scale_y_continuous(limits = c(.3,1.25), breaks = seq(.3,1.25, 0.1)) +
+  geom_smooth(method = "lm") +
+  labs(title = "Quality by Sulphates") +
+  xlab("Quality") +
+  ylab("Sulphate Level (potassium sulphate - g / dm3)") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+## Description Two
+Sulphates had the second highest positive correlation with quality. Sulphates are additives to wines which acts as antimicrobial and antioxidant agents. These preserve the wines so perhaps an increase in sulphates would produce less likelihood that the wine tasted would have gone bad.
+
+## Plot Three
+```{r}
+ggplot(aes(x = sulphates, y = alcohol), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") + 
+  scale_x_continuous(limits = c(.3,1.25), breaks = seq(.3,1.25, 0.1)) +
+  scale_y_continuous(limits = c(9,14), breaks = seq(9, 14, 0.5)) +
+  geom_smooth(method = "lm") +
+  labs(title = "Sulphates by Alcohol") +
+  xlab("Sulphate Level (potassium sulphate - g / dm3)") +
+  ylab("Alcohol (% by volume)") +
+  theme(plot.title = element_text(hjust = 0.5))
+```
+## Description Three
+This shows little correlation between the two highest positively correlated attributes to wine quality in the dataset, sulphates and alcohol. Since we're ultimately trying to find the attributes which influence the quality of wine and possibly to predict the quality based on these attributes, it's important that the features are not redundant. Redundant attributes lead to a model which overfits predictions.
 
 # Reflections
+As wine quality was pretty much a categorical value containing mostly values of 5 or 6, these highly influenced the appearance of the graphs correlating with quality. I was hoping that some of the transforms would give a higher correlation with quality than just the normal attribute, but I didn't see any real evidence of this with the transforms I created.
 
-
+Some limitations are due to the volume of data. 1599 records is not a large dataset, perhaps I should have chosen the white wines instead. To investigate the data further, I would like to see a larger set. In addition, while the quality measure was a median of three wine experts, I would also like to see the mean in order to show a more continuous variable quality measurement.
