@@ -544,6 +544,7 @@ ggplot(aes(x = quality, y = alcohol), data = ws) +
   ylab("Alcohol (% by volume)") +
   theme(plot.title = element_text(hjust = 0.5))
 ```
+
 ## Description One
 Alcohol had the highest positive correlation with wine quality. This makes sense as one of the primary reason to have an alcoholic beverage in the first place is for alcohol. At around 7 level quality the vast majority of those wines contain an alcohol percentage greater than 10%.
 
@@ -559,6 +560,7 @@ ggplot(aes(x = quality, y = sulphates), data = ws) +
   ylab("Sulphate Level (potassium sulphate - g / dm3)") +
   theme(plot.title = element_text(hjust = 0.5))
 ```
+
 ## Description Two
 Sulphates had the second highest positive correlation with quality. Sulphates are additives to wines which acts as antimicrobial and antioxidant agents. These preserve the wines so perhaps an increase in sulphates would produce less likelihood that the wine tasted would have gone bad.
 
@@ -574,6 +576,7 @@ ggplot(aes(x = sulphates, y = alcohol), data = ws) +
   ylab("Alcohol (% by volume)") +
   theme(plot.title = element_text(hjust = 0.5))
 ```
+
 ## Description Three
 This shows little correlation between the two highest positively correlated attributes to wine quality in the dataset, sulphates and alcohol. Since we're ultimately trying to find the attributes which influence the quality of wine and possibly to predict the quality based on these attributes, it's important that the features are not redundant. Redundant attributes lead to a model which overfits predictions.
 
