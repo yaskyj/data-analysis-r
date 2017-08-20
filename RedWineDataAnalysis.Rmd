@@ -5,7 +5,6 @@ output: html_document
 
 ## This report explores which chemical properties influence the quality of red wines.
 
-# Data Exploration
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo=FALSE, message=FALSE, warning=FALSE, fig.width=12, fig.height=8)
 ```
@@ -22,6 +21,8 @@ library(grid)
 library(e1071)
 library(RColorBrewer)
 ```
+
+# Univariate Plots Section
 
 The report explores a dataset containing quality and 11 features for 1599 red wines observations.
 
@@ -51,9 +52,6 @@ cor(ws)
 ```
 Correlations between all variables.
   
-```{r}
-ggpairs(ws)
-```
 
 A quick matrix chart showing some of the relationships between variables.
 
@@ -67,10 +65,15 @@ summary(ws$quality)
 ```
 The qualities conform to a fairly normal distribution. While the scores limits were 0-10, no wines fell below 3 or scored above 8 and most falling below a 6.
 
-### Explore each variable individually and against quality
+### Explore each variable individually and the correlation with quality
+
 ```{r}
-ggplot(aes(x = fixed.acidity), data = ws) + 
+p1 = ggplot(aes(x = fixed.acidity), data = ws) + 
   geom_histogram(color = I("black"), fill = I("#099DD9"))
+p2 = ggplot(aes( x = 1, y = fixed.acidity ), data = ws) + 
+               geom_jitter(alpha = 0.1) +
+               geom_boxplot(alpha = 0.2, color = "#099DD9")
+grid.arrange(p1, p2, ncol=2)
 ```
 ```{r}
 summary(ws$fixed.acidity)
@@ -100,17 +103,14 @@ cor(log(ws$fixed.acidity), ws$quality)
 ```
 The correlation with the log transform correlates worse than the normal attribute.
 
-```{r}
-ggplot(aes(x = quality, y = fixed.acidity), data = ws) + 
-  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
-  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
-  geom_smooth(method = "lm")
-```
-The very slight positive correlation can be seen in the trendline.
 
 ```{r}
-ggplot(aes(x = volatile.acidity), data = ws) + 
+p1 = ggplot(aes(x = volatile.acidity), data = ws) + 
   geom_histogram(color = I("black"), fill = I("#099DD9"))
+p2 = ggplot(aes( x = 1, y = volatile.acidity ), data = ws) + 
+               geom_jitter(alpha = 0.1) +
+               geom_boxplot(alpha = 0.2, color = "#099DD9")
+grid.arrange(p1, p2, ncol=2)
 ```
 ```{r}
 summary(ws$volatile.acidity)
@@ -141,16 +141,12 @@ cor(sqrt(sqrt(ws$volatile.acidity)), ws$quality)
 But it doesn't create a much stronger correlation.
 
 ```{r}
-ggplot(aes(x = quality, y = volatile.acidity), data = ws) + 
-  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
-  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
-  geom_smooth(method = "lm")
-```
-The negative correlation is obvious in the trendline.
-
-```{r}
-ggplot(aes(x = citric.acid), data = ws) + 
+p1 = ggplot(aes(x = citric.acid), data = ws) + 
   geom_histogram(color = I("black"), fill = I("#099DD9"))
+p2 = ggplot(aes( x = 1, y = citric.acid ), data = ws) + 
+               geom_jitter(alpha = 0.1) +
+               geom_boxplot(alpha = 0.2, color = "#099DD9")
+grid.arrange(p1, p2, ncol=2)
 ```
 ```{r}
 summary(ws$citric.acid)
@@ -180,15 +176,12 @@ cor(sqrt(ws$citric.acid), ws$quality)
 And the squareroot actually lowers the correlation.
 
 ```{r}
-ggplot(aes(x = quality, y = citric.acid), data = ws) + 
-  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
-  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
-  geom_smooth(method = "lm")
-```
-The weak positive correlation can be seen in the trendline.
-```{r}
-ggplot(aes(x = residual.sugar), data = ws) + 
+p1 = ggplot(aes(x = residual.sugar), data = ws) + 
   geom_histogram(color = I("black"), fill = I("#099DD9"))
+p2 = ggplot(aes( x = 1, y = residual.sugar ), data = ws) + 
+               geom_jitter(alpha = 0.1) +
+               geom_boxplot(alpha = 0.2, color = "#099DD9")
+grid.arrange(p1, p2, ncol=2)
 ```
 ```{r}
 summary(ws$residual.sugar)
@@ -217,17 +210,14 @@ cor(1/ws$residual.sugar, ws$quality)
 ```
 While this almost doubles the correlation (negatively), the correlation is insignificant.
 
-```{r}
-ggplot(aes(x = quality, y = residual.sugar), data = ws) + 
-  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
-  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
-  geom_smooth(method = "lm")
-```
-The trendline is almost completely straight showing no real correlation.
 
 ```{r}
-ggplot(aes(x = chlorides), data = ws) + 
+p1 = ggplot(aes(x = chlorides), data = ws) + 
   geom_histogram(color = I("black"), fill = I("#099DD9"))
+p2 = ggplot(aes( x = 1, y = chlorides ), data = ws) + 
+               geom_jitter(alpha = 0.1) +
+               geom_boxplot(alpha = 0.2, color = "#099DD9")
+grid.arrange(p1, p2, ncol=2)
 ```
 ```{r}
 summary(ws$chlorides)
@@ -256,17 +246,14 @@ cor(sqrt(sqrt(ws$chlorides)), ws$quality)
 ```
 The squareroot of squareroot only creates a slighty higher correlation with quality
 
-```{r}
-ggplot(aes(x = quality, y = chlorides), data = ws) + 
-  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
-  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
-  geom_smooth(method = "lm")
-```
-The negative trendline show the slight correlation.
 
 ```{r}
-ggplot(aes(x = free.sulfur.dioxide), data = ws) + 
+p1 = ggplot(aes(x = free.sulfur.dioxide), data = ws) + 
   geom_histogram(color = I("black"), fill = I("#099DD9"))
+p2 = ggplot(aes( x = 1, y = free.sulfur.dioxide ), data = ws) + 
+               geom_jitter(alpha = 0.1) +
+               geom_boxplot(alpha = 0.2, color = "#099DD9")
+grid.arrange(p1, p2, ncol=2)
 ```
 ```{r}
 summary(ws$free.sulfur.dioxide)
@@ -295,17 +282,14 @@ cor(log10(ws$free.sulfur.dioxide), ws$quality)
 ```
 But the correlation remains almost unchanged.
 
-```{r}
-ggplot(aes(x = quality, y = free.sulfur.dioxide), data = ws) + 
-  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9")+
-  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
-  geom_smooth(method = "lm")
-```
-The fairly flat trendline show the lack of correlation.
 
 ```{r}
-ggplot(aes(x = total.sulfur.dioxide), data = ws) + 
+p1 = ggplot(aes(x = total.sulfur.dioxide), data = ws) + 
   geom_histogram(color = I("black"), fill = I("#099DD9"))
+p2 = ggplot(aes( x = 1, y = total.sulfur.dioxide ), data = ws) + 
+               geom_jitter(alpha = 0.1) +
+               geom_boxplot(alpha = 0.2, color = "#099DD9")
+grid.arrange(p1, p2, ncol=2)
 ```
 ```{r}
 summary(ws$total.sulfur.dioxide)
@@ -333,17 +317,14 @@ Log transform creates a fairly normal distribution.
 cor(log10(ws$total.sulfur.dioxide), ws$quality)
 ```
 
-```{r}
-ggplot(aes(x = quality, y = total.sulfur.dioxide), data = ws) + 
-  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
-  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
-  geom_smooth(method = "lm")
-```
-The extremely weak correlation between total sulfur dioxide and quality can be seen in the trendline.
 
 ```{r}
-ggplot(aes(x = density), data = ws) + 
+p1 = ggplot(aes(x = density), data = ws) + 
   geom_histogram(color = I("black"), fill = I("#099DD9"))
+p2 = ggplot(aes( x = 1, y = density ), data = ws) + 
+               geom_jitter(alpha = 0.1) +
+               geom_boxplot(alpha = 0.2, color = "#099DD9")
+grid.arrange(p1, p2, ncol=2)
 ```
 ```{r}
 summary(ws$density)
@@ -353,18 +334,14 @@ skewness(ws$density)
 ```
 Density shows a fairly normal distribution so no transforms will be performed.
 
-```{r}
-ggplot(aes(x = quality, y = density), data = ws) + 
-  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
-  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
-  geom_smooth(method = "lm")
-```
-The slight negative correlation can be seen in the trendline.
 
 ```{r}
-ggplot(aes(x = pH), data = ws) + 
+p1 = ggplot(aes(x = pH), data = ws) + 
   geom_histogram(color = I("black"), fill = I("#099DD9"))
-
+p2 = ggplot(aes( x = 1, y = pH ), data = ws) + 
+               geom_jitter(alpha = 0.1) +
+               geom_boxplot(alpha = 0.2, color = "#099DD9")
+grid.arrange(p1, p2, ncol=2)
 ```
 ```{r}
 summary(ws$pH)
@@ -375,15 +352,12 @@ skewness(ws$pH)
 pH shows a normal distribution.
 
 ```{r}
-ggplot(aes(x = quality, y = pH), data = ws) + 
-  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
-  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
-  geom_smooth(method = "lm")
-```
-The trendline shows almost no correlation.
-```{r}
-ggplot(aes(x = sulphates), data = ws) + 
+p1 = ggplot(aes(x = sulphates), data = ws) + 
   geom_histogram(color = I("black"), fill = I("#099DD9"))
+p2 = ggplot(aes( x = 1, y = sulphates), data = ws) + 
+               geom_jitter(alpha = 0.1) +
+               geom_boxplot(alpha = 0.2, color = "#099DD9")
+grid.arrange(p1, p2, ncol=2)
 ```
 ```{r}
 summary(ws$sulphates)
@@ -411,23 +385,15 @@ Reciprical transform shows the best normal distribution.
 cor(1/(ws$sulphates), ws$quality)
 ```
 This actually increased correlation and turned it negative. We'll explore both options.
-```{r}
-ggplot(aes(x = quality, y = sulphates), data = ws) + 
-  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
-  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
-  geom_smooth(method = "lm")
-```
-```{r}
-ggplot(aes(x = quality, y = 1/(ws$sulphates)), data = ws) + 
-  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
-  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
-  geom_smooth(method = "lm")
-```
-The reciprocal sulphates show a much stronger negative trend with quality.
+
 
 ```{r}
-ggplot(aes(x = alcohol), data = ws) + 
+p1 = ggplot(aes(x = alcohol), data = ws) + 
   geom_histogram(color = I("black"), fill = I("#099DD9"))
+p2 = ggplot(aes( x = 1, y = alcohol), data = ws) + 
+               geom_jitter(alpha = 0.1) +
+               geom_boxplot(alpha = 0.2, color = "#099DD9")
+grid.arrange(p1, p2, ncol=2)
 ```
 ```{r}
 summary(ws$alcohol)
@@ -455,6 +421,94 @@ The best normalization is created by the squareroot transform.
 cor(sqrt(ws$alcohol), ws$quality)
 ```
 No real change in corrlation, but we'll plot both.
+
+# Bivariate Plots Section
+
+```{r}
+ggplot(aes(x = quality, y = fixed.acidity), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
+  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
+  geom_smooth(method = "lm")
+```
+The very slight positive correlation can be seen in the trendline.
+
+```{r}
+ggplot(aes(x = quality, y = volatile.acidity), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
+  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
+  geom_smooth(method = "lm")
+```
+The negative correlation is obvious in the trendline.
+
+```{r}
+ggplot(aes(x = quality, y = citric.acid), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
+  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
+  geom_smooth(method = "lm")
+```
+The weak positive correlation can be seen in the trendline.
+
+```{r}
+ggplot(aes(x = quality, y = residual.sugar), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
+  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
+  geom_smooth(method = "lm")
+```
+The trendline is almost completely straight showing no real correlation.
+
+```{r}
+ggplot(aes(x = quality, y = chlorides), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
+  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
+  geom_smooth(method = "lm")
+```
+The negative trendline show the slight correlation.
+
+```{r}
+ggplot(aes(x = quality, y = free.sulfur.dioxide), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9")+
+  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
+  geom_smooth(method = "lm")
+```
+The fairly flat trendline show the lack of correlation.
+
+```{r}
+ggplot(aes(x = quality, y = total.sulfur.dioxide), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
+  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
+  geom_smooth(method = "lm")
+```
+The extremely weak correlation between total sulfur dioxide and quality can be seen in the trendline.
+
+```{r}
+ggplot(aes(x = quality, y = density), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
+  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
+  geom_smooth(method = "lm")
+```
+The slight negative correlation can be seen in the trendline.
+
+```{r}
+ggplot(aes(x = quality, y = pH), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
+  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
+  geom_smooth(method = "lm")
+```
+The trendline shows almost no correlation.
+
+```{r}
+ggplot(aes(x = quality, y = sulphates), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
+  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
+  geom_smooth(method = "lm")
+```
+```{r}
+ggplot(aes(x = quality, y = 1/(ws$sulphates)), data = ws) + 
+  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") +
+  scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
+  geom_smooth(method = "lm")
+```
+The reciprocal sulphates show a much stronger negative trend with quality.
 
 ```{r}
 ggplot(aes(x = quality, y = alcohol), data = ws) + 
@@ -530,6 +584,17 @@ ggplot(aes(x = sulphates, y = alcohol), data = ws) +
 cor(ws$sulphates, ws$alcohol)
 ```
 Very little correlation between sulphates and alchohol.
+
+# Bivariate Analysis
+
+# Multivariate Plots Section
+
+```{r}
+ggpairs(ws)
+```
+
+
+# Multivariate Analysis
 
 # Final Plots and Summary
 ## Plot One
