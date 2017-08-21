@@ -89,6 +89,7 @@ dim(ws)
 ws_out <- ws_out[!is.na(ws_out$outlier),]
 dim(ws_out)
 length(outliers)
+cor(ws_out$volatile.acidity, ws_out$quality)
 ```
 
 ```{r}
