@@ -247,7 +247,31 @@ cor(sqrt(ws$alcohol), ws$quality)
 ```
 No real change in corrlation, but we'll plot both in the bivariate section.
 
+# Univariate Analysis
+
+### What is the structure of your dataset?
+There are 1,599 red wines in the dataset with 12 features (fixed acidity, volatile acidity, citric acid, residual sugar, chlorides, free sulfur dioxide, total sulfur dioxide, density, pH, sulphates, alcohol and quality).
+
+* Most red wines are of qualities 5 and 6.
+* The median quality is 6.
+* The mean alcohol is wines was 10.42.
+* About 75% of red wines had sulphates less than .73.
+
+### What is/are the main feature(s) of interest in your dataset?
+The variables volatile acidity, citric acid, sulphates, and alcohol have the highest correlations with quality.
+
+### Of the features you investigated, were there any unusual distributions? \
+I checked for NA values and found none.
+
+For the four features with the highest correlations, I removed outliers and reperformed correlations with quality. This only made a significant increase in correlation with sulphates.
+
+I also performed log, squareroot, squareroot of squareroot, cube root, and reciprocal transforms for all four features with the highest correlation to determine if more normal distribution could be created and higher correlations with quality could be confirmed. Higher correlations were not achieved.
+
 # Bivariate Plots Section
+
+```{r}
+ggpairs(ws)
+```
 
 ```{r}
 ggplot(aes(x = quality, y = volatile.acidity), data = ws) + 
@@ -255,7 +279,7 @@ ggplot(aes(x = quality, y = volatile.acidity), data = ws) +
   scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
   geom_smooth(method = "lm")
 ```
-The negative correlation is obvious in the trendline.
+The negative correlation is obvious in the trendline between volatile acidity and quality.
 
 ```{r}
 ggplot(aes(x = quality, y = citric.acid), data = ws) + 
@@ -263,7 +287,7 @@ ggplot(aes(x = quality, y = citric.acid), data = ws) +
   scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
   geom_smooth(method = "lm")
 ```
-The weak positive correlation can be seen in the trendline.
+The weak positive correlation can be seen in the trendline between citric acid and quality.
 
 ```{r}
 ggplot(aes(x = quality, y = sulphates), data = ws) + 
@@ -291,7 +315,7 @@ ggplot(aes(x = quality, y = sqrt(alcohol)), data = ws) +
   scale_x_continuous(limits = c(2,9), breaks = seq(2, 9, 0.5)) +
   geom_smooth(method = "lm")
 ```
-They both appear to have the strongest trendlines we've seen with quality.
+Both alchohol and squareroot transform appear to have the strongest trendlines we've seen with quality.
 
 Now we'll see see how the four attributes with the hightest correlations with quality correlate with each other.
 ```{r}
@@ -356,12 +380,19 @@ Very little correlation between sulphates and alchohol.
 
 # Bivariate Analysis
 
+Alcohol appears the be the highest correlation with quality followed by sulphates as far as positive correlations. Volatile acidity, citric acidity, and sulphates have medium correlations with each other.
+
+The most interesting item is that positively correlated with each other, both citric acid and sulphates have very low correlations with alcohol. This points to a combination of either alcohol and citric acid or sulphates being excellent attributes to use in prediction.
+
 # Multivariate Plots Section
 
 ```{r}
-ggpairs(ws)
+ggplot(aes(x = alcohol, y = residual.sugar, color = factor(quality)), data = red.wine) +
+  geom_point(alpha = 0.8, size = 1) +
+  geom_smooth(method = "lm", se = FALSE,size=1)  +
+  scale_color_brewer(type='seq',
+  guide=guide_legend(title='Quality'))
 ```
-
 
 # Multivariate Analysis
 
