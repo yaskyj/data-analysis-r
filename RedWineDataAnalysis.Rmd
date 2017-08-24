@@ -82,6 +82,7 @@ skewness(ws$volatile.acidity)
 Volatile acidity is positively skewed.
 
 ```{r}
+#Removing outliers to check on correlation
 outliers <- boxplot.stats(ws$volatile.acidity)$out
 ws_out <- ws
 ws_out$outlier <- ifelse(ws_out$volatile.acidity %in% outliers, NA, ws_out$volatile.acidity)
@@ -91,6 +92,7 @@ dim(ws_out)
 length(outliers)
 cor(ws_out$volatile.acidity, ws_out$quality)
 ```
+Removal of outliers did not improved the correlation with quality.
 
 ```{r}
 p1 <- ggplot(aes(x = log10(volatile.acidity + 1)), data = ws) + 
@@ -129,6 +131,15 @@ skewness(ws$citric.acid)
 Citric acid appears to be positively skewed, but the jump around .5 reduces the skewness measure.
 
 ```{r}
+outliers <- boxplot.stats(ws$citric.acid)$out
+ws_out <- ws
+ws_out$outlier <- ifelse(ws_out$citric.acid %in% outliers, NA, ws_out$citric.acid)
+ws_out <- ws_out[!is.na(ws_out$outlier),]
+cor(ws_out$citric.acid, ws_out$quality)
+```
+The removal of outliers did not improve correlation which makes sense since the chart doesn't appear to show any outliers.
+
+```{r}
 p1 <- ggplot(aes(x = log10(citric.acid + 1)), data = ws) + 
   geom_histogram(color = I("black"), fill = I("#099DD9"))
 p2 <- ggplot(aes(x = sqrt(citric.acid)), data = ws) + 
@@ -164,6 +175,15 @@ skewness(ws$sulphates)
 Sulphates are highly positively skewed.
 
 ```{r}
+outliers <- boxplot.stats(ws$sulphates)$out
+ws_out <- ws
+ws_out$outlier <- ifelse(ws_out$sulphates %in% outliers, NA, ws_out$sulphates)
+ws_out <- ws_out[!is.na(ws_out$outlier),]
+cor(ws_out$sulphates, ws_out$quality)
+```
+Removing sulphate significantly improves correlation with quality from .25 to .39
+
+```{r}
 p1 <- ggplot(aes(x = log10(sulphates + 1)), data = ws) + 
   geom_histogram(color = I("black"), fill = I("#099DD9"))
 p2 <- ggplot(aes(x = sqrt(sulphates)), data = ws) + 
@@ -180,7 +200,7 @@ Reciprical transform shows the best normal distribution.
 ```{r}
 cor(1/(ws$sulphates), ws$quality)
 ```
-This actually increased correlation and turned it negative. We'll explore both options.
+This actually increased correlation and turned it negative. We'll explore both options in the bivariate section.
 
 
 ```{r}
@@ -200,6 +220,15 @@ skewness(ws$alcohol)
 Alcohol has a positive skew.
 
 ```{r}
+outliers <- boxplot.stats(ws$alcohol)$out
+ws_out <- ws
+ws_out$outlier <- ifelse(ws_out$alcohol %in% outliers, NA, ws_out$alcohol)
+ws_out <- ws_out[!is.na(ws_out$outlier),]
+cor(ws_out$alcohol, ws_out$quality)
+```
+Removing alcohol outliers did not improve correlation with quality.
+
+```{r}
 p1 <- ggplot(aes(x = log10(alcohol + 1)), data = ws) + 
   geom_histogram(color = I("black"), fill = I("#099DD9"))
 p2 <- ggplot(aes(x = sqrt(alcohol)), data = ws) + 
@@ -216,7 +245,7 @@ The best normalization is created by the squareroot transform.
 ```{r}
 cor(sqrt(ws$alcohol), ws$quality)
 ```
-No real change in corrlation, but we'll plot both.
+No real change in corrlation, but we'll plot both in the bivariate section.
 
 # Bivariate Plots Section
 
