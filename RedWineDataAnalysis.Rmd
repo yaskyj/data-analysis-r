@@ -387,14 +387,56 @@ The most interesting item is that positively correlated with each other, both ci
 # Multivariate Plots Section
 
 ```{r}
-ggplot(aes(x = alcohol, y = residual.sugar, color = factor(quality)), data = red.wine) +
+ggplot(aes(x = alcohol, y = volatile.acidity, color = factor(quality)), data = ws) +
+  geom_point(alpha = 0.8, size = 1) +
+  geom_smooth(method = "lm", se = FALSE,size=1)  +
+  scale_color_brewer(type='seq',
+  guide=guide_legend(title='Quality'))
+```
+ 
+```{r}
+ws$alcohol.bucket = cut(ws$alcohol,c(8, 9, 10.5, 12, 16))
+ggplot(aes(x = alcohol.bucket, y = volatile.acidity), data = ws) + 
+   geom_boxplot(aes(fill = factor(quality)) )
+```
+Showing the qualities bucketed by alcohol, it's obvious that alcohol have a greater impact since no quality 8 shows below the 10.5-12 bucket, but the line charts do show the negative correlation with volatile acidity as the quality lines gradually move lower on the graph.
+
+```{r}
+ggplot(aes(x = alcohol, y = citric.acid, color = factor(quality)), data = ws) +
   geom_point(alpha = 0.8, size = 1) +
   geom_smooth(method = "lm", se = FALSE,size=1)  +
   scale_color_brewer(type='seq',
   guide=guide_legend(title='Quality'))
 ```
 
+```{r}
+ggplot(aes(x = alcohol.bucket, y = citric.acid), data = ws) + 
+   geom_boxplot(aes(fill = factor(quality)) )
+```
+The positive correlations of both features are evident in both charts, but also the relatively low correlation values. There is a large spread for citric acid at the 12-16 bucket of alcohol. Maybe citric acid has a larger importance in determining quality at lower levels of alcohol content. 
+
+```{r}
+ggplot(aes(x = alcohol, y = sulphates, color = factor(quality)), data = ws) +
+  geom_point(alpha = 0.8, size = 1) +
+  geom_smooth(method = "lm", se = FALSE,size=1)  +
+  scale_color_brewer(type='seq',
+  guide=guide_legend(title='Quality'))
+```
+
+```{r}
+ggplot(aes(x = alcohol.bucket, y = sulphates), data = ws) + 
+   geom_boxplot(aes(fill = factor(quality)) )
+```
+Sulphates show an obvious positive correlation with quality in both charts and appear to be less dependent on the alcohol quantities than citric acid.
+
 # Multivariate Analysis
+The box plots revealed a lot of nuances in the data. 
+
+Volatile acidity's negative correlation appears to come mostly from extremely high amounts. This is shown in the 10.5-12 alcohol bucket where the 3 quality factor shows a large spike in the amount of volatile acidity.
+
+Citric acid appears to have more of an impact on quality while in the lower alcohol buckets. Once the alcohol hits the highest bucket, the citric acid ranges for quality levels 6, 7, and 8 have large spreads and overlap each other.
+
+Sulphates appear to have fairly tight ranges for all quality levels in each of the alcohol buckets. In addition, sulphate quality levels appears to be less impacted by the alcohol buckets.
 
 # Final Plots and Summary
 ## Plot One
@@ -431,14 +473,13 @@ Sulphates had the second highest positive correlation with quality. Sulphates ar
 
 ## Plot Three
 ```{r}
-ggplot(aes(x = sulphates, y = alcohol), data = ws) + 
-  geom_point(alpha = 5/10, position = position_jitter(h = 0), color = "#099DD9") + 
-  scale_x_continuous(limits = c(.3,1.25), breaks = seq(.3,1.25, 0.1)) +
-  scale_y_continuous(limits = c(9,14), breaks = seq(9, 14, 0.5)) +
-  geom_smooth(method = "lm") +
-  labs(title = "Sulphates by Alcohol") +
-  xlab("Sulphate Level (potassium sulphate - g / dm3)") +
-  ylab("Alcohol (% by volume)") +
+ggplot(aes(x = alcohol.bucket, y = sulphates), data = ws) + 
+  geom_boxplot(aes(fill = factor(quality))) +
+  scale_y_continuous(limits = c(.3,1.25), breaks = seq(.3,1.25, 0.1)) +
+  labs(title = "Quality Levels for Sulphate Ranges by Alcohol") +
+  xlab("Alcohol Ranges (% by volume)") +
+  ylab("Sulphate Level (potassium sulphate - g / dm3)") +
+  guides(fill=guide_legend(title="Quality")) +
   theme(plot.title = element_text(hjust = 0.5))
 ```
 
